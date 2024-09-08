@@ -118,4 +118,45 @@ axs_combined[1, 0].set_ylabel('Total Penggunaan Sepeda per Hari')
 plt.tight_layout()
 st.pyplot(fig_combined)
 
+# RFM Analysis
+st.header('Analisis RFM (Recency, Frequency, Monetary)')
+
+# Calculate Recency, Frequency, and Monetary
+data['dteday'] = pd.to_datetime(data['dteday'])
+last_date = data['dteday'].max()
+data['recency'] = (last_date - data['dteday']).dt.days
+
+rfm_data = data.groupby('instant').agg({
+    'recency': 'min',
+    'cnt_daily': ['mean', 'sum']
+}).reset_index()
+rfm_data.columns = ['user_id', 'recency', 'frequency', 'monetary']
+
+st.write('Data RFM:')
+st.write(rfm_data)
+
+# Plot RFM Results
+fig_rfm, axs_rfm = plt.subplots(1, 3, figsize=(18, 6))
+
+# Recency
+sns.histplot(rfm_data['recency'], bins=30, kde=True, ax=axs_rfm[0], color='blue')
+axs_rfm[0].set_title('Distribusi Recency')
+axs_rfm[0].set_xlabel('Recency (days)')
+axs_rfm[0].set_ylabel('Frequency')
+
+# Frequency
+sns.histplot(rfm_data['frequency'], bins=30, kde=True, ax=axs_rfm[1], color='green')
+axs_rfm[1].set_title('Distribusi Frequency')
+axs_rfm[1].set_xlabel('Frequency')
+axs_rfm[1].set_ylabel('Frequency')
+
+# Monetary
+sns.histplot(rfm_data['monetary'], bins=30, kde=True, ax=axs_rfm[2], color='red')
+axs_rfm[2].set_title('Distribusi Monetary')
+axs_rfm[2].set_xlabel('Monetary')
+axs_rfm[2].set_ylabel('Frequency')
+
+plt.tight_layout()
+st.pyplot(fig_rfm)
+
 st.caption('Copyright (c) 2024 Muhammad Rayasya Dziqi Cahyana')
