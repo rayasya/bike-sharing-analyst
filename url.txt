@@ -1,1 +1,1 @@
-https://training-data-analysis.streamlit.app/
+https://training-analyze-data.streamlit.app/
