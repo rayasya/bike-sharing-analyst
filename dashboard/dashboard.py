@@ -121,12 +121,12 @@ st.pyplot(fig_combined)
 # RFM Analysis
 st.header('Analisis RFM (Recency, Frequency, Monetary)')
 
-# Calculate Recency, Frequency, and Monetary
-data['dteday'] = pd.to_datetime(data['dteday'])
-last_date = data['dteday'].max()
-data['recency'] = (last_date - data['dteday']).dt.days
+# Calculate Recency, Frequency, and Monetary on filtered data
+filtered_data['dteday'] = pd.to_datetime(filtered_data['dteday'])
+last_date = filtered_data['dteday'].max()
+filtered_data['recency'] = (last_date - filtered_data['dteday']).dt.days
 
-rfm_data = data.groupby('instant').agg({
+rfm_data = filtered_data.groupby('instant').agg({
     'recency': 'min',
     'cnt_daily': ['mean', 'sum']
 }).reset_index()
